@@ -10,6 +10,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(100), unique=True)
     
     posts: Mapped['Posts'] = relationship(back_populates='author')
+    comments: Mapped['Comments'] = relationship(back_populates='author')
     
 class Posts(Base):
     __tablename__="posts"
@@ -20,3 +21,17 @@ class Posts(Base):
     author_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
     
     author: Mapped['User'] = relationship(back_populates='posts')
+    comments: Mapped['Comments'] = relationship(back_populates='post')
+    
+    
+class Comments(Base):
+    __tablename__='comments'
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    content: Mapped[str] = mapped_column(Text)
+    author_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    
+    author: Mapped['User'] = relationship(back_populates='comments')
+    post: Mapped['Posts'] = relationship(back_populates='comments')
+    
+    
